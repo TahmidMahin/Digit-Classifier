@@ -1,4 +1,4 @@
-    import java.util.Arrays;
+import java.util.Arrays;
 public class Numpy {
 
 
@@ -59,12 +59,8 @@ public class Numpy {
      * @return temp
      */
     public static double[][] tanh(double[][] mat) {
-        double[][] temp = new double[mat.length][mat[0].length];
-        for(int i=0;i<mat.length;i++)
-            for(int j=0;j<mat[0].length;j++)
-                temp[i][j] = Math.tanh(mat[i][j]);
-                
-        return temp;
+        double[][] temp = exp(multiply(-2, mat));
+    	return multiply(subtract(1, temp), inverse(add(1, temp)));
     }
     
     /**
