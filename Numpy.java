@@ -63,6 +63,14 @@ public class Numpy {
     	return multiply(subtract(1, temp), inverse(add(1, temp)));
     }
     
+    public static double[][] relu(double[][] mat) {
+    	double[][] result = new double[mat.length][mat[0].length];
+    	for(int i=0; i<mat.length; i++)
+    		for(int j=0; j<mat[0].length; j++)
+    			result[i][j] = Math.max(0, mat[i][j]);
+    	return result;
+    }
+    
     /**
      * finds the element wise inverse value of a given matrix
      * @param mat
