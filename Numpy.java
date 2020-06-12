@@ -1,26 +1,79 @@
-import java.util.Arrays;
-public class Numpy {
 
+import java.util.Arrays;
+import java.util.Random;
+
+public class Numpy {
 
     Numpy() {
     }
-    /////////logarithm ,exponential & other functions///////////////
     /**
-     * Transposes a given matrix
+     * initializes the given matrix with Gaussian values
      * @param mat
-     * @return 
+     * @return a new matrix
      */
-    public static double[][] transpose(double[][] mat) {
-    	double[][] result = new double[mat[0].length][mat.length];
-    	for(int i=0; i<result.length; i++)
-    		for(int j=0; j<result[0].length; j++)
-    			result[i][j] = mat[j][i];
-    	return result;
+    public static double[][] initialize(double[][] mat) {
+        Random rand = new Random();
+        double[][] W = new double[mat.length][mat[0].length];
+        for (double[] W1 : W) {
+            for (int j = 0; j < W[0].length; j++) {
+                W1[j] = rand.nextGaussian();
+            }
+        }
+        return W;
     }
     /**
-     * finds the element wise exponential value of a given matrix
+     * initializes the given matrix with 2nd parameter value
      * @param mat
-     * @return 
+     * @param k
+     * @return a new matrix
+     */
+    public static double[][] initialize(double[][] mat,int k) {
+        double[][] W = new double[mat.length][mat[0].length];
+        for (double[] W1 : W) {
+            for (int j = 0; j < W[0].length; j++) {
+                W1[j] = k;
+            }
+        }
+        return W;
+    }
+    /**
+     * initializes the given matrix with random double values [0,1)
+     * @param mat
+     * @return a new matrix
+     */
+    public static double[][] initializeRand(double[][] mat) {
+        Random rand = new Random();
+        double[][] W = new double[mat.length][mat[0].length];
+        for (double[] W1 : W) {
+            for (int j = 0; j < W[0].length; j++) {
+                W1[j] = rand.nextDouble();
+            }
+        }
+        return W;
+    }
+    /////////logarithm ,exponential & other functions///////////////
+
+    /**
+     * Transposes a given matrix
+     *
+     * @param mat
+     * @return
+     */
+    public static double[][] transpose(double[][] mat) {
+        double[][] result = new double[mat[0].length][mat.length];
+        for (int i = 0; i < result.length; i++) {
+            for (int j = 0; j < result[0].length; j++) {
+                result[i][j] = mat[j][i];
+            }
+        }
+        return result;
+    }
+
+    /**
+     * finds the element wise exponential value of a given matrix
+     *
+     * @param mat
+     * @return
      */
     public static double[][] exp(double[][] mat) {
         double[][] result = new double[mat.length][mat[0].length];
@@ -31,10 +84,12 @@ public class Numpy {
         }
         return result;
     }
+
     /**
      * finds the element wise natural logarithm value of a given matrix
+     *
      * @param mat
-     * @return 
+     * @return
      */
     public static double[][] log(double[][] mat) {
         double[][] result = new double[mat.length][mat[0].length];
@@ -45,36 +100,44 @@ public class Numpy {
         }
         return result;
     }
+
     /**
      * finds the SIGMOID value of a given matrix
+     *
      * @param mat
-     * @return 
+     * @return
      */
     public static double[][] sigmoid(double[][] mat) {
         return inverse(add(1, exp(subtract(0, mat))));
     }
+
     /**
-     * finds the element wise tanh value of a given matrix, and returns the matrix but doesn't change the original one
+     * finds the element wise tanh value of a given matrix, and returns the
+     * matrix but doesn't change the original one
+     *
      * @param mat
      * @return temp
      */
     public static double[][] tanh(double[][] mat) {
         double[][] temp = exp(multiply(-2, mat));
-    	return multiply(subtract(1, temp), inverse(add(1, temp)));
+        return multiply(subtract(1, temp), inverse(add(1, temp)));
     }
-    
+
     public static double[][] relu(double[][] mat) {
-    	double[][] result = new double[mat.length][mat[0].length];
-    	for(int i=0; i<mat.length; i++)
-    		for(int j=0; j<mat[0].length; j++)
-    			result[i][j] = Math.max(0, mat[i][j]);
-    	return result;
+        double[][] result = new double[mat.length][mat[0].length];
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                result[i][j] = Math.max(0, mat[i][j]);
+            }
+        }
+        return result;
     }
-    
+
     /**
      * finds the element wise inverse value of a given matrix
+     *
      * @param mat
-     * @return 
+     * @return
      */
     public static double[][] inverse(double[][] mat) {
         double[][] temp = new double[mat.length][mat[0].length];
@@ -90,10 +153,11 @@ public class Numpy {
     /////////////////broadcasting///////////////////
     /**
      * resizes a vector to a matrix
+     *
      * @param a
      * @param row
      * @param col
-     * @return 
+     * @return
      */
     public static double[][] broadcast(double[][] a, int row, int col) {
         double[][] b = new double[row][col];
@@ -120,9 +184,10 @@ public class Numpy {
     ///////////////element wise multiplication operations////////////////
     /**
      * finds the element wise multiplication of two given matrix
+     *
      * @param mat1
      * @param mat2
-     * @return 
+     * @return
      */
     public static double[][] multiply(double[][] mat1, double[][] mat2) {
         int row1 = mat1.length;
@@ -163,11 +228,13 @@ public class Numpy {
         }
         return result;
     }
+
     /**
      * finds the element wise multiplication of a given value and a given matrix
+     *
      * @param mat1
      * @param num
-     * @return 
+     * @return
      */
     public static double[][] multiply(double[][] mat1, double num) {
         double[][] mat2 = new double[mat1.length][mat1[0].length];
@@ -176,11 +243,13 @@ public class Numpy {
         }
         return multiply(mat1, mat2);
     }
+
     /**
      * finds the element wise multiplication of a given value and a given matrix
+     *
      * @param num
      * @param mat1
-     * @return 
+     * @return
      */
     public static double[][] multiply(double num, double[][] mat1) {
         double[][] mat2 = new double[mat1.length][mat1[0].length];
@@ -194,9 +263,10 @@ public class Numpy {
     /////////Various addition operation//////////////////////
     /**
      * finds the element wise addition of two given matrix
+     *
      * @param mat1
      * @param mat2
-     * @return 
+     * @return
      */
     public static double[][] add(double[][] mat1, double[][] mat2) {
         int row1 = mat1.length;
@@ -236,11 +306,13 @@ public class Numpy {
         }
         return result;
     }
+
     /**
      * finds the element wise addition of a given value and a given matrix
+     *
      * @param mat1
      * @param num
-     * @return 
+     * @return
      */
     public static double[][] add(double[][] mat1, double num) {
         double[][] mat2 = new double[mat1.length][mat1[0].length];
@@ -249,11 +321,13 @@ public class Numpy {
         }
         return add(mat1, mat2);
     }
+
     /**
      * finds the element wise addition of a given value and a given matrix
+     *
      * @param num
      * @param mat1
-     * @return 
+     * @return
      */
     public static double[][] add(double num, double[][] mat1) {
         double[][] mat2 = new double[mat1.length][mat1[0].length];
@@ -262,10 +336,12 @@ public class Numpy {
         }
         return add(mat1, mat2);
     }
+
     /**
      * finds the row wise summation of a given matrix
+     *
      * @param mat
-     * @return 
+     * @return
      */
     public static double sum(double[][] mat) {
         double result = 0.0;
@@ -276,10 +352,12 @@ public class Numpy {
         }
         return result;
     }
+
     /**
      * finds the summation of a double array
+     *
      * @param mat
-     * @return 
+     * @return
      */
     public static double sum(double[] mat) {
         double result = 0.0;
@@ -293,18 +371,21 @@ public class Numpy {
     //////////////////////various subtract operations/////////////////
     /**
      * finds the element wise subtraction of a given matrix & a value
+     *
      * @param mat1
      * @param num
-     * @return 
+     * @return
      */
     public static double[][] subtract(double[][] mat1, double num) {
         return add(mat1, -num);
     }
+
     /**
      * finds the element wise subtraction of a given matrix & a value
+     *
      * @param num
      * @param mat1
-     * @return 
+     * @return
      */
     public static double[][] subtract(double num, double[][] mat1) {
         double[][] temp = new double[mat1.length][mat1[0].length];
@@ -315,11 +396,13 @@ public class Numpy {
         }
         return add(temp, num);
     }
+
     /**
      * finds the element wise subtraction of two given matrix
+     *
      * @param mat1
      * @param mat2
-     * @return 
+     * @return
      */
     public static double[][] subtract(double[][] mat1, double[][] mat2) {
         int row1 = mat1.length;
@@ -359,12 +442,14 @@ public class Numpy {
         }
         return result;
     }
+
     ////////////////////////////////////////////////////////////////
     /**
      * finds the dot products of two matrix
+     *
      * @param mat1
      * @param mat2
-     * @return 
+     * @return
      */
     public static double[][] dot(double[][] mat1, double[][] mat2) {
         int m1 = mat1.length;
@@ -384,9 +469,11 @@ public class Numpy {
         }
         return c;
     }
+
     /**
      * prints a matrix
-     * @param mat 
+     *
+     * @param mat
      */
     public static void print(double[][] mat) {
         System.out.print("[");
