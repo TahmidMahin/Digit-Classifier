@@ -11,18 +11,22 @@ import java.io.*;
             - all array indexing starts from 1.
 
 
-        public static void initialize(double a, double b):
+        public static void initialize(int _nOfUsedImages, double a, double b):
             - THE USER MUST CALL THIS METHOD BEFORE CALLING ANYTHING ELSE.
             - initializes (loads the training images and test images from
             files into matrices)
 
+            - _nOfUsedImages:
+                We have a total of 42000 labeled images. This parameter should
+                state how many of these images are going to be used in total for 
+                both training and testing. Limit: 0 < _nOfUsedImages <= 42000.
+
             - What are a and b?
-                We have a total of 42000 labeled images. We want to divide
-                these images into two parts. One part, for training, another
-                part, for testing.
+                We want to divide _nOfUsedImages images into two parts. One part,
+                for training, another part, for testing.
 
                 Now, (a : b) = (number_of_training_images : number_of_test_images).
-                Where, number_of_training_images + number_of_test_images = 42000.
+                Where, number_of_training_images + number_of_test_images = _nOfUsedImages.
 
                 So, if there were 10 images, and a = 4 and b = 1, then 8 images
                 would be used for training and 2 would be used for testing. Getter
@@ -46,9 +50,9 @@ import java.io.*;
                 So, array[i][1] to array[i][784] represents the greyscale values
                 of all the pixels of the i'th training example.
 
-             NOTE: As we saw in the initialize() method, 42000 images are getting
-             divided into two parts. So not every row represent an image. To know
-             the exact number of images being used for training, use the method
+             NOTE: As we saw in the initialize() method, _nOfUsedImages images are
+             getting divided into two parts. So not every row represent an image.
+             To know the exact number of images being used for training, use the method
              getNoOfTrainingImages() (see below).
 
 
@@ -74,18 +78,6 @@ import java.io.*;
             instead of the training examples.
 
 
-        public static int getNoOfTrainingImages()
-            - returns the number of images used for training the NN.
-
-
-        public static int getNoOfTestImages()
-            - returns the number of images used for testing the NN's accuracy.
-
-
-        public static int getNoOfPixelsPerImage()
-            - returns the number of pixels that each image consists (784).
-
-
         public static int[] getTrainingExpectedResultsArray():
             - returns an array whose i'th index represents the number that
             the i'th training image shows.
@@ -94,10 +86,28 @@ import java.io.*;
         public static int[] getTestExpectedResultsArray()
             - returns an array whose i'th index represents the number that
             the i'th test image should show.
+
+
+        public static int getNoOfPixelsPerImage()
+            - returns the number of pixels that each image consists (784).
+
+
+        public static int getNoOfUsedImages()
+            - returns the total number of images used for training
+            and testing the NN.
+
+
+        public static int getNoOfTrainingImages()
+            - returns the number of images used for training the NN.
+
+
+        public static int getNoOfTestImages()
+            - returns the number of images used for testing the NN's accuracy.
  */
 
 public class Dataset {
     private static int nOfLabeledImages = 42000;
+    private static int nOfUsedImages;
     private static int nOfPixelsPerImage = 784;
     private static double ratioOfTrainingData = (double) 8;
     private static double ratioOfTestData = (double) 2;
@@ -112,16 +122,18 @@ public class Dataset {
     private static int[][] testDataArray = new int[43000][800];
     private static int[] testExpectedResultsArray = new int[43000];
 
-    public static void initialize(double a, double b) throws Exception {
-        if(a <= 0.0 || b <= 0.0) return;
+    public static void initialize(int _nOfUsedImages, double a, double b) throws Exception {
+        if(a <= 0.0 || b <= 0.0 || _nOfUsedImages <= 0) return;
+
+        nOfUsedImages = Math.min(_nOfUsedImages, nOfLabeledImages);
         ratioOfTrainingData = a;
         ratioOfTestData = b;
 
-        nOfTrainingImages = (int) (nOfLabeledImages * (ratioOfTrainingData) / (ratioOfTestData + ratioOfTrainingData));
-        nOfTestImages = 42000 - nOfTrainingImages;
+        nOfTrainingImages = (int) (nOfUsedImages * (ratioOfTrainingData) / (ratioOfTestData + ratioOfTrainingData));
+        nOfTestImages = nOfUsedImages - nOfTrainingImages;
 
-//        System.out.println(nOfTrainingImages);
-//        System.out.println(nOfTestImages);
+        System.out.println(nOfTrainingImages);
+        System.out.println(nOfTestImages);
 
         File file1 = new File(imagesPath);
         Scanner scImage = new Scanner(file1);
@@ -138,10 +150,10 @@ public class Dataset {
             trainingExpectedResultsArray[lc1] = Integer.parseInt(scExp.nextLine());
         }
 
-        for(lc1 = nOfTrainingImages + 1; lc1 <= nOfLabeledImages; lc1++) {
+        for(lc1 = nOfTrainingImages + 1; lc1 <= nOfUsedImages; lc1++) {
             for(lc2 = 1; lc2 <= nOfPixelsPerImage; lc2++) {
                 testDataArray[lc1 - nOfTrainingImages][lc2] = Integer.parseInt(scImage.nextLine());
-                if (lc1 == nOfLabeledImages) System.out.print(testDataArray[lc1 - nOfTrainingImages][lc2] + " ");
+//                if (lc1 == nOfLabeledImages) System.out.print(testDataArray[lc1 - nOfTrainingImages][lc2] + " ");
             }
             testExpectedResultsArray[lc1 - nOfTrainingImages] = Integer.parseInt(scExp.nextLine());
         }
@@ -150,6 +162,12 @@ public class Dataset {
 //        if(!scExp.hasNextLine()) System.out.println("done");
     }
 
+    public static int[][] getTrainingDataArray() {
+        return trainingDataArray;
+    }
+    public static int[][] getTestDataArray() {
+        return testDataArray;
+    }
     public static double calculateTrainingAccuracy(int[] in) {
         int lg, ok;
         for(lg = 1, ok = 0; lg <= nOfTrainingImages; lg++)
@@ -162,26 +180,22 @@ public class Dataset {
             if(in[lg] == testExpectedResultsArray[lg]) ok++;
         return ok * 100.0 / nOfTestImages;
     }
-
-    public static int[][] getTrainingDataArray() {
-        return trainingDataArray;
-    }
-    public static int[][] getTestDataArray() {
-        return testDataArray;
-    }
     public static int[] getTrainingExpectedResultsArray() {
         return trainingExpectedResultsArray;
     }
     public static int[] getTestExpectedResultsArray() {
         return testExpectedResultsArray;
     }
+    public static int getNoOfPixelsPerImage() {
+        return nOfPixelsPerImage;
+    }
+    public static int getNoOfUsedImages() {
+        return nOfUsedImages;
+    }
     public static int getNoOfTrainingImages() {
         return nOfTrainingImages;
     }
     public static int getNoOfTestImages() {
         return nOfTestImages;
-    }
-    public static int getNoOfPixelsPerImage() {
-        return nOfPixelsPerImage;
     }
 }
