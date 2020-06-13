@@ -12,9 +12,9 @@ import java.io.*;
 
 
         public static void initialize(double a, double b):
-            - THE USER MUST CALL THIS CLASS BEFORE CALLING ANYTHING ELSE.
+            - THE USER MUST CALL THIS METHOD BEFORE CALLING ANYTHING ELSE.
             - initializes (loads the training images and test images from
-            files into arrays)
+            files into matrices)
 
             - What are a and b?
                 We have a total of 42000 labeled images. We want to divide
@@ -25,10 +25,10 @@ import java.io.*;
                 Where, number_of_training_images + number_of_test_images = 42000.
 
                 So, if there were 10 images, and a = 4 and b = 1, then 8 images
-                will be used for training and 2 will be used for testing. Getter
+                would be used for training and 2 would be used for testing. Getter
                 methods (getNoOfTrainingImages() and getNoOfTestImages()) (see below)
                 have been created for expressing how many images are being used for each
-                task. If a <= 0 or b <= 0, then the function will terminate without doing
+                task. If a <= 0 or b <= 0, then the method will terminate without doing
                 anything.
 
 
@@ -36,7 +36,7 @@ import java.io.*;
             - returns the 2D matrix of Training images.
             - The returned array has a dimension of [43000] * [800].
 
-            Each column represents the pixels of a particular training example
+            Each row represents the pixels of a particular training example
             (a particular image).
             Each image consists of 784 pixels.
 
@@ -47,7 +47,7 @@ import java.io.*;
                 of all the pixels of the i'th training example.
 
              NOTE: As we saw in the initialize() method, 42000 images are getting
-             divided into two parts. So not every column represent an image. To know
+             divided into two parts. So not every row represent an image. To know
              the exact number of images being used for training, use the method
              getNoOfTrainingImages() (see below).
 
@@ -69,7 +69,7 @@ import java.io.*;
 
 
         public static int[] calculateTestAccuracy():
-            - similar to the nethod calculateTrainingAccuracy(int[] in),
+            - similar to the method calculateTrainingAccuracy(int[] in),
             but this one calculates the accuracy of the testing examples
             instead of the training examples.
 
