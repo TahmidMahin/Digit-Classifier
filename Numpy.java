@@ -7,50 +7,61 @@ public class Numpy {
     Numpy() {
     }
     /**
-     * initializes the given matrix with Gaussian values
-     * @param mat
-     * @return a new matrix
+     * creates matrix with random numbers from the normal distribution
+     * @param row
+     * @param col
+     * @return matrix
      */
-    public static double[][] initialize(double[][] mat) {
+    public static double[][] randn(int row, int col) {
         Random rand = new Random();
-        double[][] W = new double[mat.length][mat[0].length];
-        for (double[] W1 : W) {
-            for (int j = 0; j < W[0].length; j++) {
-                W1[j] = rand.nextGaussian();
-            }
-        }
-        return W;
+        double[][] mat = new double[row][col];
+        for (double[] r : mat)
+        	for(int j=0; j<col; j++)
+        		r[j] = rand.nextGaussian();
+        return mat;
     }
+
     /**
-     * initializes the given matrix with 2nd parameter value
-     * @param mat
-     * @param k
-     * @return a new matrix
+     * creates matrix with random numbers uniformly distributed between 0 and 1
+     * @param row
+     * @param col
+     * @return matrix
      */
-    public static double[][] initialize(double[][] mat,int k) {
-        double[][] W = new double[mat.length][mat[0].length];
-        for (double[] W1 : W) {
-            for (int j = 0; j < W[0].length; j++) {
-                W1[j] = k;
-            }
-        }
-        return W;
-    }
-    /**
-     * initializes the given matrix with random double values [0,1)
-     * @param mat
-     * @return a new matrix
-     */
-    public static double[][] initializeRand(double[][] mat) {
+    public static double[][] rand(int row, int col) {
         Random rand = new Random();
-        double[][] W = new double[mat.length][mat[0].length];
-        for (double[] W1 : W) {
-            for (int j = 0; j < W[0].length; j++) {
-                W1[j] = rand.nextDouble();
-            }
-        }
-        return W;
+        double[][] mat = new double[row][col];
+        for (double[] r : mat)
+        	for(int j=0; j<col; j++)
+        		r[j] = rand.nextDouble();
+        return mat;
     }
+    
+    /**
+     * creates a matrix filled with 1
+     * @param row
+     * @param col
+     * @return matrix
+     */
+    public static double[][] ones(int row, int col) {
+        double[][] mat = new double[row][col];
+        for (double[] r : mat)
+        	Arrays.fill(r, 1);
+        return mat;
+    }
+    
+    /**
+     * creates a matrix filled with 0
+     * @param row
+     * @param col
+     * @return matrix
+     */
+    public static double[][] zeros(int row, int col) {
+        double[][] mat = new double[row][col];
+        for (double[] r : mat)
+        	Arrays.fill(r, 0);
+        return mat;
+    }
+    
     /////////logarithm ,exponential & other functions///////////////
 
     /**
