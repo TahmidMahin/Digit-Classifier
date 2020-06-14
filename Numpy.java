@@ -143,7 +143,17 @@ public class Numpy {
         }
         return result;
     }
-
+    
+    public static double[][] softmax(double[][] mat) {
+    	double[][] result = exp(mat);
+    	double[][] temp = transpose(result);
+    	double[][] sum = new double[1][mat[0].length];
+    	int index = 0;
+      	for(double[] row: temp)
+    		sum[0][index++] = sum(row);
+    	return multiply(result, inverse(sum));
+    }
+    
     /**
      * finds the element wise inverse value of a given matrix
      *
