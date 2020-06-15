@@ -1,4 +1,3 @@
-
 import java.util.Arrays;
 import java.util.Random;
 
@@ -130,10 +129,20 @@ public class Numpy {
      * @return temp
      */
     public static double[][] tanh(double[][] mat) {
-        double[][] temp = exp(multiply(-2, mat));
-        return multiply(subtract(1, temp), inverse(add(1, temp)));
+        double[][] temp = new double[mat.length][mat[0].length];
+        for(int i=0;i<mat.length;i++)
+            for(int j=0;j<mat[0].length;j++)
+                temp[i][j] = Math.tanh(mat[i][j]);
+                
+        return temp;
     }
-
+    /**
+     * finds the element wise Relu activation function value of a given matrix, and returns the
+     * matrix but doesn't change the original one
+     * 
+     * @param mat
+     * @return 
+     */
     public static double[][] relu(double[][] mat) {
         double[][] result = new double[mat.length][mat[0].length];
         for (int i = 0; i < mat.length; i++) {
@@ -143,7 +152,14 @@ public class Numpy {
         }
         return result;
     }
-    
+    /**
+     * takes as input a vector 'z' of K real numbers, 
+     * and normalizes it into a probability distribution 
+     * consisting of K probabilities proportional to the exponentials of the input numbers
+     * 
+     * @param mat
+     * @return 
+     */
     public static double[][] softmax(double[][] mat) {
     	double[][] result = exp(mat);
     	double[][] sum = sum(result, 1);
