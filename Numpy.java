@@ -146,12 +146,8 @@ public class Numpy {
     
     public static double[][] softmax(double[][] mat) {
     	double[][] result = exp(mat);
-    	double[][] temp = transpose(result);
-    	double[][] sum = new double[1][mat[0].length];
-    	int index = 0;
-      	for(double[] row: temp)
-    		sum[0][index++] = sum(row);
-    	return multiply(result, inverse(sum));
+    	double[][] sum = sum(result, 1);
+     	return multiply(result, inverse(sum));
     }
     
     /**
@@ -359,7 +355,7 @@ public class Numpy {
     }
 
     /**
-     * finds the row wise summation of a given matrix
+     * finds the summation of a given matrix
      *
      * @param mat
      * @return
@@ -370,6 +366,30 @@ public class Numpy {
             for (int j = 0; j < mat[0].length; j++) {
                 result += mat1[j];
             }
+        }
+        return result;
+    }
+    
+    /**
+     * finds the row wise summation of a given matrix when axis = 0
+     * finds the column wise summation of a given matrix when axis = 1
+     * @param mat
+     * @return
+     */
+    public static double[][] sum(double[][] mat, int axis) {
+        double[][] result;
+        if(axis == 0) {
+        	result = new double[mat.length][1];
+        	int index = 0;
+        	for(double[] mat1 : mat)
+        		result[index++][0] = sum(mat1);
+        }
+        else {
+        	result = new double[1][mat[0].length];
+        	int index = 0;
+        	double[][] temp = transpose(mat);
+        	for(double[] mat1 : temp)
+        		result[0][index++] = sum(mat1);
         }
         return result;
     }
