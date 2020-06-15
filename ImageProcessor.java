@@ -85,7 +85,13 @@ public class ImageProcessor {
         }
         return X;
     }
-
+    /**
+     * Converts an rgb image to Grayscale, first parameter takes the input image location
+     * and 2nd parameter takes the output image location, the function returns nothing.
+     * 
+     * @param in
+     * @param out 
+     */
     public static void rgbToGray(String in, String out) {
         BufferedImage img = null;
         File f = null;
