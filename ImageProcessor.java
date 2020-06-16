@@ -58,69 +58,29 @@ public class ImageProcessor {
      * @return
      * @throws IOException
      */
-    public static double[][] imageToMatrix(String[] inputImagePath) throws IOException {
+    public static double[][] imageToMatrix(String[] inputImagePath, int scaledWidth, int scaledHeight) throws IOException {
         int numOfImage = inputImagePath.length;
         String[] processedImagePath = new String[numOfImage];
         for (int i = 0; i < numOfImage; i++) {
             processedImagePath[i] = inputImagePath[i].substring(0, inputImagePath[i].lastIndexOf(".")) + "resized" + inputImagePath[i].substring(inputImagePath[i].lastIndexOf("."));
-            resizeImage(inputImagePath[i], processedImagePath[i], 64, 64);
-            rgbToGray(processedImagePath[i], processedImagePath[i]);
+            resizeImage(inputImagePath[i], processedImagePath[i], scaledWidth, scaledHeight);
         }
-        double[][] X = new double[64 * 64 * 3][numOfImage];
-        for (int i = 0; i < numOfImage; i++) {
-            inputImage(processedImagePath[i]);
+        double[][] X = new double[scaledWidth * scaledWidth][numOfImage];
+        for (int ithImage = 0; ithImage < numOfImage; ithImage++) {
+            inputImage(processedImagePath[ithImage]);
             int height = image.getHeight();
             int width = image.getWidth();
-            int prod = height * width;
-            int j = 0;
-            for (int y = 0; y < height; y++) {
+            for (int y = 0, pixel = 0; y < height; y++, pixel++) {
                 for (int x = 0; x < width; x++) {
-                    int pixel = image.getRGB(x, y);
-                    X[j][i] = ((pixel >> 16) & 0xff) / 255;
-                    X[prod + j][i] = ((pixel >> 8) & 0xff) / 255;
-                    X[2 * prod + j][i] = (pixel & 0xff) / 255;
-                    j++;
+                    int p = image.getRGB(x, y);
+                    double r = (double)((p >> 16) & 0xff);
+                    double g = (double)((p >> 8) & 0xff);
+                    double b = (double)(p & 0xff);
+                    double avg = (r+g+b) / 3;
+                    X[pixel][ithImage] = avg;
                 }
             }
         }
         return X;
     }
-    /**
-     * Converts an rgb image to Grayscale, first parameter takes the input image location
-     * and 2nd parameter takes the output image location, the function returns nothing.
-     * 
-     * @param in
-     * @param out 
-     */
-    public static void rgbToGray(String in, String out) {
-        BufferedImage img = null;
-        File f = null;
-        try {
-            f = new File(in);
-            img = ImageIO.read(f);
-        } catch (IOException e) {
-            System.out.println("Can't convert the image to Grayscale since no image found");
-        }
-        int width = img.getWidth();
-        int height = img.getHeight();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int p = img.getRGB(x, y);
-                int a = (p >> 24) & 0xff;
-                int r = (p >> 16) & 0xff;
-                int g = (p >> 8) & 0xff;
-                int b = p & 0xff;
-                int avg = (r + g + b) / 3;
-                p = (a << 24) | (avg << 16) | (avg << 8) | avg;
-                img.setRGB(x, y, p);
-            }
-        }
-        try {
-            f = new File(out);
-            ImageIO.write(img, "jpg", f);
-        } catch (IOException e) {
-            System.out.println("Converted the rgb image to gray but couldn't replace.");
-        }
-    }
-
 }
