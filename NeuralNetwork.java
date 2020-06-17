@@ -93,13 +93,13 @@ public class NeuralNetwork {
 		
 		double[][] dZ3 = Numpy.subtract(A3, output);
 		double[][] dW3 = Numpy.multiply(Numpy.dot(dZ3, Numpy.transpose(A2)), 1.0/trainingExample);
-		double[][] db3 = Numpy.multiply(Numpy.sum(dZ3, 0), 1/trainingExample);
+		double[][] db3 = Numpy.multiply(Numpy.sum(dZ3, 0), 1.0/trainingExample);
 		double[][] dZ2 = Numpy.multiply(Numpy.dot(Numpy.transpose(W3), dZ3), reluBackward(Z2));
 		double[][] dW2 = Numpy.multiply(Numpy.dot(dZ2, Numpy.transpose(A1)), 1.0/trainingExample);
-		double[][] db2 = Numpy.multiply(Numpy.sum(dZ2, 0), 1/trainingExample);
+		double[][] db2 = Numpy.multiply(Numpy.sum(dZ2, 0), 1.0/trainingExample);
 		double[][] dZ1 = Numpy.multiply(Numpy.dot(Numpy.transpose(W2), dZ2), tanhBackward(Z1));
 		double[][] dW1 = Numpy.multiply(Numpy.dot(dZ1, Numpy.transpose(input)), 1.0/trainingExample);
-		double[][] db1 = Numpy.multiply(Numpy.sum(dZ1, 0), 1/trainingExample);
+		double[][] db1 = Numpy.multiply(Numpy.sum(dZ1, 0), 1.0/trainingExample);
 		
 		grads.put("dW1", dW1);
 		grads.put("db1", db1);
