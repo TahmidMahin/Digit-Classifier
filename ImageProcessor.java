@@ -82,11 +82,11 @@ public class ImageProcessor {
             for (int y = 0, j = 0; y < height; y++, j++) {
                 for (int x = 0; x < width; x++) {
                     int pixel = image.getRGB(x, y);
-                    double r = ((pixel >> 16) & 0xff) / 255;
-                    double g = ((pixel >> 8) & 0xff) / 255;
-                    double b = (pixel & 0xff) / 255;
+                    double r = (double)((pixel >> 16) & 0xff);
+                    double g = (double)((pixel >> 8) & 0xff);
+                    double b = (double)(pixel & 0xff);
                     double avg = (r+g+b) / 3;
-                    X[j][i] = avg;
+                    X[j][i] = avg / 255;
                 }
             }
         }
