@@ -9,98 +9,67 @@ import java.io.*;
             class should be called like this,
                 Dataset.methodName(...);
             - all array indexing starts from 1.
-
-
         public static void initialize(int _nOfUsedImages, double a, double b):
             - THE USER MUST CALL THIS METHOD BEFORE CALLING ANYTHING ELSE.
             - initializes (loads the training images and test images from
             files into matrices)
-
             - _nOfUsedImages:
                 We have a total of 42000 labeled images. This parameter should
                 state how many of these images are going to be used in total for 
                 both training and testing. Limit: 0 < _nOfUsedImages <= 42000.
-
             - What are a and b?
                 We want to divide _nOfUsedImages images into two parts. One part,
                 for training, another part, for testing.
-
                 Now, (a : b) = (number_of_training_images : number_of_test_images).
                 Where, number_of_training_images + number_of_test_images = _nOfUsedImages.
-
                 So, if there were 10 images, and a = 4 and b = 1, then 8 images
                 would be used for training and 2 would be used for testing. Getter
                 methods (getNoOfTrainingImages() and getNoOfTestImages()) (see below)
                 have been created for expressing how many images are being used for each
                 task. If a <= 0 or b <= 0, then the method will terminate without doing
                 anything.
-
-
         public static int[][] getTrainingDataArray():
             - returns the 2D matrix of Training images.
             - The returned array has a dimension of [43000] * [800].
-
             Each row represents the pixels of a particular training example
             (a particular image).
             Each image consists of 784 pixels.
-
                 Let
                     int array[][] = Dataset.getTrainingDataArray();
-
                 So, array[i][1] to array[i][784] represents the greyscale values
                 of all the pixels of the i'th training example.
-
              NOTE: As we saw in the initialize() method, _nOfUsedImages images are
              getting divided into two parts. So not every row represent an image.
              To know the exact number of images being used for training, use the method
              getNoOfTrainingImages() (see below).
-
-
         public static int[][] getTestDataArray():
             - similar to the method getTrainingDataArray(), but this one
             returns the 2D matrix of Testing images instead of the Training images.
-
             Use method getNoOfTestImages() to know the exact number of images
             being used for testing.
-
-
         public static double calculateTrainingAccuracy(int[] in):
             - given an array containing the NN's output for all the training
             examples, this method calculates the accuracy of the NN in percentage.
             - parameter: an array whose i'th index represents the neural
             network's output for the i'th training example. array indexing
             of the parameter array should start from 1.
-
-
         public static int[] calculateTestAccuracy():
             - similar to the method calculateTrainingAccuracy(int[] in),
             but this one calculates the accuracy of the testing examples
             instead of the training examples.
-
-
         public static int[] getTrainingExpectedResultsArray():
             - returns an array whose i'th index represents the number that
             the i'th training image shows.
-
-
         public static int[] getTestExpectedResultsArray()
             - returns an array whose i'th index represents the number that
             the i'th test image should show.
-
-
         public static int getNoOfPixelsPerImage()
             - returns the number of pixels that each image consists (784).
-
-
         public static int getNoOfUsedImages()
             - returns the total number of images used for training
             and testing the NN.
-
-
         public static int getNoOfTrainingImages()
             - returns the number of images used for training the NN.
-
-
         public static int getNoOfTestImages()
             - returns the number of images used for testing the NN's accuracy.
  */
@@ -114,12 +83,12 @@ public class Dataset {
     private static int nOfTrainingImages;
     private static int nOfTestImages;
 
-    private static String imagesPath = "datasets/images.txt";
-    private static String expectedResultsPath = "datasets/expected results.txt";
+    private static String imagesPath = "images.txt";
+    private static String expectedResultsPath = "expected results.txt";
 
-    private static int[][] trainingDataArray = new int[43000][800];
+    private static double[][] trainingDataArray = new double[43000][800];
     private static int[] trainingExpectedResultsArray = new int[43000];
-    private static int[][] testDataArray = new int[43000][800];
+    private static double[][] testDataArray = new double[43000][800];
     private static int[] testExpectedResultsArray = new int[43000];
 
     public static void initialize(int _nOfUsedImages, double a, double b) throws Exception {
@@ -158,14 +127,16 @@ public class Dataset {
             testExpectedResultsArray[lc1 - nOfTrainingImages] = Integer.parseInt(scExp.nextLine());
         }
 
-//        if(!scImage.hasNextLine()) System.out.println("done");
-//        if(!scExp.hasNextLine()) System.out.println("done");
+        if(!scImage.hasNextLine()) System.out.println("done");
+        //if(!scExp.hasNextLine()) System.out.println("done");
     }
 
-    public static int[][] getTrainingDataArray() {
+    public static double[][] getTrainingDataArray() {
+        System.out.println("Training data row,col: "+trainingDataArray.length+" "+trainingDataArray[0].length);
         return trainingDataArray;
+        
     }
-    public static int[][] getTestDataArray() {
+    public static double[][] getTestDataArray() {
         return testDataArray;
     }
     public static double calculateTrainingAccuracy(int[] in) {
