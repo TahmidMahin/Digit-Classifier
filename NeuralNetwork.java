@@ -33,6 +33,10 @@ public class NeuralNetwork {
 		trainingExample = labels.length;
 	}
 	
+	public NeuralNetwork(String[] trainingImagePath, int[] labels) {
+		this(ImageProcessor.imageToMatrix(trainingImagePath), labels);
+	}
+	
 	private double[][] reluBackward(double[][] mat) {
 		double[][] result = new double[mat.length][mat[0].length];
 		for(int i=0; i<mat.length; i++)
@@ -123,8 +127,25 @@ public class NeuralNetwork {
 		}
 	}
 	
-	public double[][] predict(double[][] testData) {
-		return forwardPropagation(testData);
+	public int[] predict(double[][] testData) {
+		double[][] probability = forwardPropagation(testData);
+		int[] labels = new int[probability[0].length];
+ 		for(int col=0; col<probability[0].length; col++) {
+			double max = -1.0;
+			int pos = 0;
+			for(int row = 0; row<probability.length; row++) {
+				if(probability[row][col] > max) {
+					max = probability[row][col];
+					pos = row;
+				}
+			}
+			labels[col] = pos;
+		}
+ 		return labels;
+	}
+	
+	public int[] predict(String[] testImagePath) {
+		return predict(ImageProcessor.imageToMatrix(testImagePath));
 	}
 	
 }
