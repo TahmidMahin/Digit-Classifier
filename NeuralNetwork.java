@@ -117,7 +117,7 @@ public class NeuralNetwork {
 	}
 
 	public void gradientDescent(double costErrorThreshold, double learningRate) {
-		for(int itr=0; 5000; itr++) {
+		for(int itr=0; itr<=5000; itr++) {
 			double[][] yhat = forwardPropagation(input);
 			double cost = computeCost(yhat);
 			backwardPropagation();
