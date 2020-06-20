@@ -122,6 +122,11 @@ public class Dataset {
     private static double[][] testDataArray;
     private static int[] testExpectedResultsArray;
 
+    public static void initialize(double nOftrainingImages) throws Exception {
+        if(nOftrainingImages < 0 || nOftrainingImages >= nOfLabeledImages) return;
+        initialize(nOfLabeledImages, nOftrainingImages / nOfLabeledImages, (nOfLabeledImages - nOftrainingImages) / nOfLabeledImages);
+    }
+
     public static void initialize(int _nOfUsedImages, double a, double b) throws Exception {
         if(a <= 0.0 || b <= 0.0 || _nOfUsedImages <= 0) return;
 
